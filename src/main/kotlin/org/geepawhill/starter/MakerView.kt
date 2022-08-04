@@ -1,23 +1,21 @@
 package org.geepawhill.starter
 
 import javafx.animation.AnimationTimer
-import javafx.scene.image.Image
+import javafx.geometry.Rectangle2D
+import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.input.MouseEvent
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
 import javafx.scene.paint.Color
+import javafx.stage.Screen
 import javafx.stage.WindowEvent
 import tornadofx.*
+import java.lang.Double.max
+import java.lang.Double.min
+import kotlin.random.Random
 
-const val SCREEN_WIDTH = 800.0
-const val SCREEN_HALF = SCREEN_WIDTH / 2.0
-const val SCREEN_HEIGHT = 480.0
-const val BUCKET_WIDTH = 64.0
-const val BUCKET_HEIGHT = 64.0
-const val BUCKET_HALF = BUCKET_WIDTH / 2.0
-
+const val MAP_WIDTH = 4096.0
+const val MAP_HEIGHT = 4096.0
 
 class Input {
 
@@ -48,60 +46,105 @@ class MakerView : View("Raindrops") {
         }
     }
 
+    private var frames = 0
+    private var dropped = 0
+    val screenBounds = Screen.getPrimary().bounds
+    var viewportRect = screenBounds
+
     val input = Input()
 
     val timer = Timer()
 
-    val bucket = imageview {
-        x = SCREEN_HALF - BUCKET_HALF
-        y = SCREEN_HEIGHT - BUCKET_HEIGHT
-        image = Image("/bucket.png")
-    }
+    val map = mutableListOf<Rectangle2D>()
+
+    val viewport = Canvas()
+    val context = viewport.graphicsContext2D
 
     override val root = pane {
-        minWidth = SCREEN_WIDTH
-        maxWidth = SCREEN_WIDTH
-        minHeight = SCREEN_HEIGHT
-        maxHeight = SCREEN_HEIGHT
-        background = Background(BackgroundFill(Color.LIGHTBLUE, null, null))
-        isFocusTraversable = true
-        addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
-            input.handle(event)
+        this += viewport
+        with(viewport) {
+            isFocusTraversable = true
+            addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
+                input.handle(event)
+            }
+            addEventHandler(MouseEvent.MOUSE_CLICKED) { _ ->
+                requestFocus()
+            }
         }
-        addEventHandler(MouseEvent.MOUSE_CLICKED) { _ ->
-            requestFocus()
-        }
-        this += bucket
     }
 
     init {
+        populate()
         primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWN) {
-            root.requestFocus()
+            viewport.requestFocus()
+            viewport.width = viewportRect.width
+            viewport.height = viewportRect.height
         }
+        primaryStage.fullScreenExitHint = ""
+        primaryStage.isFullScreen = true
+
+        val fullScreenListener = ChangeListener<Boolean>() { _, _, new ->
+            if (new == false) println("Frames: $frames Dropped: $dropped")
+        }
+        primaryStage.fullScreenProperty().addListener(fullScreenListener)
         timer.start()
+    }
+
+    private fun populate() {
+        for (i in 0..1000) {
+            val x = Random.nextDouble() * MAP_WIDTH
+            val y = Random.nextDouble() * MAP_HEIGHT
+            val width = 20.0 + (Random.nextDouble() * 100.0)
+            val height = 20.0 + (Random.nextDouble() * 100.0)
+            val rectangle = Rectangle2D(x, y, width, height)
+            map += rectangle
+        }
     }
 
     private fun handleKey(event: KeyEvent, deltaTime: Double) {
         when (event.code) {
             KeyCode.A, KeyCode.LEFT -> left(deltaTime)
             KeyCode.D, KeyCode.RIGHT -> right(deltaTime)
+            KeyCode.W, KeyCode.UP -> up(deltaTime)
+            KeyCode.S, KeyCode.DOWN -> down(deltaTime)
             else -> {}
         }
     }
 
     private fun left(deltaTime: Double) {
-        bucket.x = bucket.x - (200.0 / deltaTime)
-        if (bucket.x < 0.0) bucket.x = 0.0
+        var newX = max(viewportRect.minX - (300.0 / deltaTime), 0.0)
+        viewportRect = Rectangle2D(newX, viewportRect.minY, viewportRect.width, viewportRect.height)
     }
+
+    private fun up(deltaTime: Double) {
+        var newY = max(viewportRect.minY - (300.0 / deltaTime), 0.0);
+        viewportRect = Rectangle2D(viewportRect.minX, newY, viewportRect.width, viewportRect.height)
+    }
+
+    private fun down(deltaTime: Double) {
+        var newY = min(viewportRect.minY + (300.0 / deltaTime), MAP_HEIGHT - viewportRect.height)
+        viewportRect = Rectangle2D(viewportRect.minX, newY, viewportRect.width, viewportRect.height)
+    }
+
 
     private fun right(deltaTime: Double) {
-        bucket.x = bucket.x + (200.0 / deltaTime)
-        if (bucket.x > SCREEN_WIDTH - BUCKET_WIDTH) bucket.x = SCREEN_WIDTH - BUCKET_WIDTH
+        var newX = min(viewportRect.minX + (300.0 / deltaTime), MAP_WIDTH - viewportRect.width)
+        viewportRect = Rectangle2D(newX, viewportRect.minY, viewportRect.width, viewportRect.height)
     }
 
+
     private fun pulse(deltaTime: Double) {
-        println(deltaTime)
+        context.fill = Color.WHITE
+        context.fillRect(0.0, 0.0, viewportRect.width, viewportRect.height)
+        context.fill = Color.BLUE
+        var count = 0
+        map.filter { viewportRect.intersects(it) }.forEach { rectangle ->
+            val x = rectangle.minX - viewportRect.minX
+            val y = rectangle.minY - viewportRect.minY
+            context.fillRect(x, y, rectangle.width, rectangle.height)
+        }
+        frames += 1
+        if (deltaTime > 16.0) dropped += 1
         input.respondTo(deltaTime, this::handleKey)
-        
     }
 }
