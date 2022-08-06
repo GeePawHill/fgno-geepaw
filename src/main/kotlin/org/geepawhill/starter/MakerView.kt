@@ -46,7 +46,7 @@ class MakerView : View("Raindrops") {
 
     inner class Timer : AnimationTimer() {
         private var lastFrame = System.nanoTime()
-        public var deltaTime = 0.0
+        var deltaTime = 0.0
 
         override fun handle(now: Long) {
             deltaTime = (now - lastFrame).toDouble() / 1000000.0
@@ -57,6 +57,10 @@ class MakerView : View("Raindrops") {
 
     private var frames = 0
     private var dropped = 0
+
+    val map = mutableListOf<Rectangle2D>()
+    val canvas = populate()
+
     val screenBounds = Screen.getPrimary().bounds
     var viewportRect = screenBounds
 
@@ -64,7 +68,6 @@ class MakerView : View("Raindrops") {
 
     val timer = Timer()
 
-    val map = mutableListOf<Rectangle2D>()
 
     val viewport = Canvas()
     val context = viewport.graphicsContext2D
@@ -92,7 +95,7 @@ class MakerView : View("Raindrops") {
         timer.start()
     }
 
-    private fun populate() {
+    private fun populate(): Canvas {
         for (i in 0..1000) {
             val x = Random.nextDouble() * MAP_WIDTH
             val y = Random.nextDouble() * MAP_HEIGHT
@@ -101,6 +104,15 @@ class MakerView : View("Raindrops") {
             val rectangle = Rectangle2D(x, y, width, height)
             map += rectangle
         }
+        val canvas = Canvas()
+        val context = canvas.graphicsContext2D
+        context.fill = Color.WHITE
+        context.fillRect(0.0, 0.0, MAP_WIDTH, MAP_HEIGHT)
+        context.fill = Color.BLUE
+        map.forEach { rectangle ->
+            context.fillRect(rectangle.minX, rectangle.minY, rectangle.width, rectangle.height)
+        }
+        return canvas;
     }
 
     private fun handleKey(event: KeyEvent, deltaTime: Double) {
@@ -135,11 +147,12 @@ class MakerView : View("Raindrops") {
     }
 
 
+    var now = false
+
     private fun pulse(deltaTime: Double) {
         context.fill = Color.WHITE
         context.fillRect(0.0, 0.0, viewportRect.width, viewportRect.height)
         context.fill = Color.BLUE
-        var count = 0
         map.filter { viewportRect.intersects(it) }.forEach { rectangle ->
             val x = rectangle.minX - viewportRect.minX
             val y = rectangle.minY - viewportRect.minY
