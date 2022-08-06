@@ -5,7 +5,6 @@ import javafx.geometry.Rectangle2D
 import javafx.scene.canvas.Canvas
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
-import javafx.scene.input.MouseEvent
 import javafx.scene.paint.Color
 import javafx.stage.Screen
 import javafx.stage.WindowEvent
@@ -16,20 +15,30 @@ import kotlin.random.Random
 
 const val MAP_WIDTH = 4096.0
 const val MAP_HEIGHT = 4096.0
+const val TILE_SIZE = 32.0
 
 class Input {
 
-    private val keys = mutableListOf<KeyEvent>()
+    var left = false
+        private set
 
-    val hasKey: Boolean
-        get() = keys.isNotEmpty()
+    var right = false
+        private set
 
-    fun handle(event: KeyEvent) {
-        keys += event
-    }
+    var up = false
+        private set
 
-    fun respondTo(deltaTime: Double, handler: (event: KeyEvent, deltaTime: Double) -> Unit) {
-        if (hasKey) handler(keys.removeFirst(), deltaTime)
+    var down = false
+        private set
+
+    fun handle(code: KeyCode, isOn: Boolean) {
+        when (code) {
+            KeyCode.A, KeyCode.LEFT -> left = isOn
+            KeyCode.D, KeyCode.RIGHT -> right = isOn
+            KeyCode.W, KeyCode.UP -> up = isOn
+            KeyCode.S, KeyCode.DOWN -> down = isOn
+            else -> {}
+        }
     }
 }
 
@@ -62,21 +71,14 @@ class MakerView : View("Raindrops") {
 
     override val root = pane {
         this += viewport
-        with(viewport) {
-            isFocusTraversable = true
-            addEventHandler(KeyEvent.KEY_PRESSED) { event: KeyEvent ->
-                input.handle(event)
-            }
-            addEventHandler(MouseEvent.MOUSE_CLICKED) { _ ->
-                requestFocus()
-            }
-        }
     }
 
     init {
         populate()
         primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWN) {
-            viewport.requestFocus()
+            primaryStage.scene.setOnKeyPressed { e -> input.handle(e.code, true) }
+            primaryStage.scene.setOnKeyReleased { e -> input.handle(e.code, false) }
+
             viewport.width = viewportRect.width
             viewport.height = viewportRect.height
         }
@@ -145,6 +147,9 @@ class MakerView : View("Raindrops") {
         }
         frames += 1
         if (deltaTime > 16.0) dropped += 1
-        input.respondTo(deltaTime, this::handleKey)
+        if (input.left) left(deltaTime)
+        if (input.right) right(deltaTime)
+        if (input.up) up(deltaTime)
+        if (input.down) down(deltaTime)
     }
 }
