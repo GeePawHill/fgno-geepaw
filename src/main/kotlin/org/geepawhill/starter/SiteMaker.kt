@@ -1,6 +1,6 @@
 package org.geepawhill.starter
 
-class SiteMaker(val parentKey: Key, var key: String = Fact.next("S")) {
+class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site")) {
     private val locations = mutableSetOf<Location>()
 
     fun make(): Site {

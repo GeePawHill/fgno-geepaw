@@ -1,11 +1,5 @@
 package org.geepawhill.starter
 
-data class Location(override val key: Key = Fact.next("L")) : Fact
-
-data class Site(override val key: Key = Fact.next("S"), val locations: Set<Location> = emptySet()) : Fact
-
-data class Region(override val key: Key, val sites: Set<Site> = emptySet<Site>()) : Fact
-
 
 fun world(details: WorldMaker.() -> Unit = {}): World {
     val builder = WorldMaker()

@@ -1,6 +1,6 @@
 package org.geepawhill.starter
 
-class RegionMaker(val parentKey: Key, var key: Key = Fact.next("R")) {
+class RegionMaker(val parentKey: Key, var key: Key = Fact.next("Region")) {
     private val sites = mutableSetOf<Site>()
 
     fun make(): Region {

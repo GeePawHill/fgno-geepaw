@@ -17,7 +17,7 @@ class RegionMakerTest {
         Fact.reset()
         val maker = RegionMaker("geography")
         val region = maker.make()
-        assertThat(region.key).isEqualTo("geography.R-0")
+        assertThat(region.key).isEqualTo("geography.Region-0")
     }
 
     @Test

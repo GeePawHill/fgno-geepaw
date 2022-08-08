@@ -17,7 +17,7 @@ class LocationMakerTest {
         Fact.reset()
         val maker = LocationMaker("site")
         val location = maker.make()
-        assertThat(location.key).isEqualTo("site.L-0")
+        assertThat(location.key).isEqualTo("site.Location-0")
     }
 
 

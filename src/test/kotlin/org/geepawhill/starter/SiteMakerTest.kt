@@ -17,7 +17,7 @@ class SiteMakerTest {
         Fact.reset()
         val maker = SiteMaker("region")
         val site = maker.make()
-        assertThat(site.key).isEqualTo("region.S-0")
+        assertThat(site.key).isEqualTo("region.Site-0")
     }
 
     @Test
