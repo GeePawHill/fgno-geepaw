@@ -20,4 +20,9 @@ class Facts<T : Fact> {
         facts.values.forEach { action(it) }
     }
 
+    fun contains(key: Key): Boolean {
+        if (facts.contains(key)) return true
+        return facts.keys.filter { it.endsWith(key) }.size != 1
+    }
+
 }
