@@ -1,10 +1,10 @@
 package org.geepawhill.starter
 
 class RegionMaker(val parentKey: Key, var key: Key = Fact.next("Region")) {
-    private val sites = mutableListOf<Site>()
+    private val sites = Facts<Site>()
 
     fun make(): Region {
-        return Region(Fact.combine(parentKey, key), sites.toSet())
+        return Region(Fact.combine(parentKey, key), sites)
     }
 
     fun site(siteKey: Key = Fact.next("S"), details: SiteMaker.() -> Unit = {}) {

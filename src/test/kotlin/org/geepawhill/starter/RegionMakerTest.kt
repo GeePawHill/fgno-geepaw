@@ -25,7 +25,7 @@ class RegionMakerTest {
         val maker = RegionMaker("geography", "region")
         maker.site("site")
         val region = maker.make()
-        assertThat(region.sites.map { it.key }.first()).isEqualTo("geography.region.site")
+        assertThat(region.sites["geography.region.site"]).isNotNull
     }
 
     @Test
@@ -35,6 +35,6 @@ class RegionMakerTest {
             key = "site"
         }
         val region = maker.make()
-        assertThat(region.sites.map { it.key }.first()).isEqualTo("geography.region.site")
+        assertThat(region.sites["geography.region.site"]).isNotNull
     }
 }
