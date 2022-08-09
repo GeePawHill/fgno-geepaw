@@ -14,18 +14,24 @@ class World {
     private val sites = mutableSetOf<Site>()
 
     fun add(location: Location) {
-        all.add(location)
+        addFact(location)
         locations.add(location)
     }
 
     fun add(region: Region) {
-        all.add(region)
+        addFact(region)
         regions.add(region)
     }
 
     fun add(site: Site) {
-        all.add(site)
+        addFact(site)
         sites.add(site)
+    }
+
+    fun addFact(fact: Fact) {
+        if (all.filter { it.key == fact.key }
+                .isNotEmpty()) throw RuntimeException("The long key [${fact.key} already exists.")
+        all.add(fact)
     }
 
     fun knows(fact: Fact): Boolean {
@@ -37,7 +43,14 @@ class World {
     }
 
     operator fun get(key: Key): Fact {
-        return all.filter { it.key == key }.first()!!
+        val result = mutableSetOf<Fact>()
+        all.forEach {
+            if (it.key == key) result += it
+            if (it.key.endsWith(key)) result += it
+        }
+        if (result.isEmpty()) throw RuntimeException("No such fact: [$key]")
+        if (result.size > 1) throw RuntimeException("Ambiguous key: [$key]")
+        return result.first()!!
     }
 
     fun dump() {

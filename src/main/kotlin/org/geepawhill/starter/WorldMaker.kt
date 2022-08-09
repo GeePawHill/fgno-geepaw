@@ -2,7 +2,7 @@ package org.geepawhill.starter
 
 class WorldMaker {
 
-    private val regions = mutableSetOf<Region>()
+    private val regions = mutableListOf<Region>()
 
     fun make(): World {
         val world = World()
