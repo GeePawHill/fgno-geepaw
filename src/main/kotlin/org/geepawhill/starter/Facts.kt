@@ -16,4 +16,8 @@ class Facts<T : Fact> {
         return facts[results.first()]!!
     }
 
+    fun forEach(action: (fact: T) -> Unit) {
+        facts.values.forEach { action(it) }
+    }
+
 }

@@ -25,7 +25,7 @@ class SiteMakerTest {
         val maker = SiteMaker("region", "site")
         maker.location("location")
         val site = maker.make()
-        assertThat(site.locations.map { it.key }.first()).isEqualTo("region.site.location")
+        assertThat(site.locations["region.site.location"]).isNotNull
     }
 
     @Test
@@ -35,7 +35,7 @@ class SiteMakerTest {
             key = "location"
         }
         val site = maker.make()
-        assertThat(site.locations.map { it.key }.first()).isEqualTo("region.site.location")
+        assertThat(site.locations["region.site.location"]).isNotNull
     }
 
 

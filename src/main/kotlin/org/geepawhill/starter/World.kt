@@ -50,7 +50,7 @@ class World {
         }
         if (result.isEmpty()) throw RuntimeException("No such fact: [$key]")
         if (result.size > 1) throw RuntimeException("Ambiguous key: [$key]")
-        return result.first()!!
+        return result.first()
     }
 
     fun dump() {
