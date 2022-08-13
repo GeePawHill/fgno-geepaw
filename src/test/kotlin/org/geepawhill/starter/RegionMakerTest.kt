@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test
 
 class RegionMakerTest {
 
+    val world = World()
+
     @Test
     fun `makes correct key if regionKey supplied to maker`() {
         val maker = RegionMaker("geography", "region")
-        val region = maker.make()
+        val region = maker.make(world)
         assertThat(region.key).isEqualTo("geography.region")
     }
 
@@ -16,7 +18,7 @@ class RegionMakerTest {
     fun `makes default key if no regionKey supplied to maker or set in lambda`() {
         Fact.reset()
         val maker = RegionMaker("geography")
-        val region = maker.make()
+        val region = maker.make(world)
         assertThat(region.key).isEqualTo("geography.Region-0")
     }
 
@@ -24,7 +26,7 @@ class RegionMakerTest {
     fun `makes correct site key if supplied to site function`() {
         val maker = RegionMaker("geography", "region")
         maker.site("site")
-        val region = maker.make()
+        val region = maker.make(world)
         assertThat(region.sites["geography.region.site"]).isNotNull
     }
 
@@ -34,7 +36,7 @@ class RegionMakerTest {
         maker.site {
             key = "site"
         }
-        val region = maker.make()
+        val region = maker.make(world)
         assertThat(region.sites["geography.region.site"]).isNotNull
     }
 }

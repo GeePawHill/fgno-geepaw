@@ -1,14 +1,16 @@
 package org.geepawhill.starter
 
-class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site")) {
+class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site")) : FactMaker<Site> {
     private val locationMakers = mutableSetOf<LocationMaker>()
 
-    fun make(): Site {
+    override fun make(world: World): Site {
         val locations = Facts<Location>()
-        locationMakers.forEach { maker ->
-            locations.add(maker.make())
+        locationMakers.forEach {
+            locations += it.make(world)
         }
-        return Site(Fact.combine(parentKey, key), locations)
+        val site = Site(Fact.combine(parentKey, key), locations)
+        world.add(site)
+        return site
     }
 
     fun location(locationKey: Key = Fact.next("L"), details: LocationMaker.() -> Unit = {}) {

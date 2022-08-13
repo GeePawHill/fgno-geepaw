@@ -8,6 +8,10 @@ class Facts<T : Fact> {
         facts[fact.key] = fact
     }
 
+    operator fun plusAssign(fact: T) {
+        add(fact)
+    }
+
     operator fun get(key: Key): T {
         if (facts.contains(key)) return facts[key]!!
         val results = facts.keys.filter { it.endsWith(key) }
