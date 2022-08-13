@@ -20,5 +20,12 @@ class LocationMakerTest {
         assertThat(location.key).isEqualTo("site.Location-0")
     }
 
+    @Test
+    fun `uses key if set inside`() {
+        val maker = LocationMaker("site")
+        maker.key = "location"
+        val location = maker.make()
+        assertThat(location.key).isEqualTo("site.location")
+    }
 
 }
