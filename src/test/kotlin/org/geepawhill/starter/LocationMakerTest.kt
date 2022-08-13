@@ -15,7 +15,7 @@ class LocationMakerTest {
     }
 
     @Test
-    fun `uses next key if not supplied or set inside`() {
+    fun `uses next key if neither supplied nor set in lambda`() {
         Fact.reset()
         val maker = LocationMaker("site")
         val location = maker.make(world)
@@ -23,7 +23,7 @@ class LocationMakerTest {
     }
 
     @Test
-    fun `uses key if set inside`() {
+    fun `uses key if set in lambda`() {
         val maker = LocationMaker("site")
         maker.key = "location"
         val location = maker.make(world)
