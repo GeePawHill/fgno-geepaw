@@ -15,14 +15,24 @@ class Styles {
     }
 }
 
-class LocationView : Fragment() {
+class LocationView(val model: Model) : Fragment() {
+
+    val locationLabel = label("Location") {
+        font = Styles.LARGE_FONT
+    }
+
+
     override val root: Parent = vbox {
         minWidth = 300.0
         background = Styles.DARK_BACKGROUND
         stackpane {
-            label("Location") {
-                font = Styles.LARGE_FONT
-            }
+            this += locationLabel
+        }
+    }
+
+    init {
+        model.location.addListener { _, _, new ->
+            locationLabel.text = new.key
         }
     }
 }
@@ -44,12 +54,20 @@ class ActionView : Fragment() {
 }
 
 
-class MakerView : View("Plotter") {
+class MakerView() : View("Plotter") {
 
-    val locationView = LocationView()
+    val model = Model()
+    val locationView = LocationView(model)
     val actionView = ActionView()
 
     override val root: Parent = borderpane {
+        top = toolbar {
+            button("change location") {
+                action {
+                    model.changeLocation()
+                }
+            }
+        }
         center = splitpane {
             this += locationView
             this += actionView
