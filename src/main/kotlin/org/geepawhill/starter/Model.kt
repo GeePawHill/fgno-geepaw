@@ -7,7 +7,9 @@ class Model {
     val world = world {
         region("region") {
             site("haiku") {
-                location("kitchen")
+                location("kitchen") {
+                    route("living-room")
+                }
                 location("living-room")
             }
         }
