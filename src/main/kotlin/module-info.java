@@ -4,5 +4,5 @@ module org.geepawhill {
     requires kotlin.stdlib;
     requires tornadofx;
 
-    exports org.geepawhill.starter;
+    exports org.geepawhill.plotter;
 }
