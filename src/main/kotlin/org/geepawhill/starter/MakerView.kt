@@ -2,6 +2,7 @@ package org.geepawhill.starter
 
 import javafx.geometry.Pos
 import javafx.scene.Parent
+import javafx.scene.control.Button
 import javafx.scene.layout.Background
 import javafx.scene.layout.BackgroundFill
 import javafx.scene.paint.Color
@@ -37,7 +38,7 @@ class LocationView(val model: Model) : Fragment() {
     }
 }
 
-class ActionView : Fragment() {
+class ActionView(val model: Model) : Fragment() {
     override val root: Parent = vbox {
         background = Styles.DARK_BACKGROUND
         minWidth = 300.0
@@ -49,7 +50,14 @@ class ActionView : Fragment() {
         vbox {
             alignment = Pos.CENTER
             button("Quit")
+            children.bind(model.actions) { it -> makeButtonFor(it) }
         }
+    }
+
+    fun makeButtonFor(action: Action): Button {
+        val button = button(action.shortName) {
+        }
+        return button
     }
 }
 
@@ -58,13 +66,23 @@ class MakerView() : View("Plotter") {
 
     val model = Model()
     val locationView = LocationView(model)
-    val actionView = ActionView()
+    val actionView = ActionView(model)
 
     override val root: Parent = borderpane {
         top = toolbar {
             button("change location") {
                 action {
                     model.changeLocation()
+                }
+            }
+            button("action 1") {
+                action {
+                    model.changeAction1()
+                }
+            }
+            button("action 2") {
+                action {
+                    model.changeAction2()
                 }
             }
         }
