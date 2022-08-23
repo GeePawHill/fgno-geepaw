@@ -24,10 +24,11 @@ class Model {
     val actions = observableListOf<Action>()
 
     fun setLocation(key: Key) {
-        val location = world[key] as Location
+        val found = world[key] as Location
         actions.clear()
-        for (action in location.actions) {
+        for (action in found.actions) {
             actions.add(action)
         }
+        location.value = found
     }
 }
