@@ -1,7 +1,5 @@
 package org.geepawhill.plotter.game
 
-typealias Key = String
-
 interface Fact {
     val key: Key
 

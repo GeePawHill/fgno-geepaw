@@ -23,7 +23,7 @@ class ActionView(val model: Model) : Fragment() {
     }
 
     fun makeButtonFor(action: Action): Button {
-        val button = button(action.shortName) {
+        val button = button(action.shortDescribe) {
         }
         return button
     }

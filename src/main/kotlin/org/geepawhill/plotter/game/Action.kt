@@ -1,5 +1,11 @@
 package org.geepawhill.plotter.game
 
+
+interface WorldChanger {
+
+}
+
 interface Action {
-    val shortName: String
+    val shortDescribe: String
+    fun WorldChanger.act()
 }
