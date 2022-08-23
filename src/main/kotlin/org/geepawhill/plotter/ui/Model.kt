@@ -1,22 +1,21 @@
 package org.geepawhill.plotter.ui
 
 import javafx.beans.property.SimpleObjectProperty
-import org.geepawhill.plotter.game.Action
-import org.geepawhill.plotter.game.Key
-import org.geepawhill.plotter.game.Location
-import org.geepawhill.plotter.game.world
+import org.geepawhill.plotter.game.*
 import tornadofx.*
 
 
-class Model {
+class Model : WorldChanger {
 
     val world = world {
         region("region") {
             site("haiku") {
                 location("kitchen") {
-                    route("living-room")
+                    actions+= MoveAction("living-room")
                 }
-                location("living-room")
+                location("living-room") {
+                    actions+= MoveAction("kitchen")
+                }
             }
         }
     }
@@ -27,7 +26,7 @@ class Model {
 
     val actions = observableListOf<Action>()
 
-    fun setLocation(key: Key) {
+    override fun relocate(key: Key) {
         val found = world[key] as Location
         actions.clear()
         for (action in found.actions) {

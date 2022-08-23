@@ -14,12 +14,12 @@ class MakerView() : View("Plotter") {
         top = toolbar {
             button("kitchen") {
                 action {
-                    model.setLocation("kitchen")
+                    model.relocate("kitchen")
                 }
             }
             button("living room") {
                 action {
-                    model.setLocation("living-room")
+                    model.relocate("living-room")
                 }
             }
         }

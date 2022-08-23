@@ -17,13 +17,15 @@ class ActionView(val model: Model) : Fragment() {
         }
         vbox {
             alignment = Pos.CENTER
-            button("Quit")
             children.bind(model.actions) { it -> makeButtonFor(it) }
         }
     }
 
     fun makeButtonFor(action: Action): Button {
         val button = button(action.shortDescribe) {
+            action {
+                    action.act(model)
+            }
         }
         return button
     }

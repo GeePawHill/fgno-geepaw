@@ -1,10 +1,12 @@
 package org.geepawhill.plotter.game
 
-class MoveAction(destination:Key) : Action {
+class MoveAction(val destination:Key) : Action {
     override val shortDescribe = "Move: ${destination.suffix()}"
 
-    override fun WorldChanger.act() {
-        TODO("Not yet implemented")
-    }
 
+    override fun act(changer: WorldChanger) {
+        with(changer) {
+            relocate(destination)
+        }
+    }
 }
