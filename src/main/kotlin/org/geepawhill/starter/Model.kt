@@ -4,10 +4,6 @@ import javafx.beans.property.SimpleObjectProperty
 import tornadofx.*
 
 
-interface Action {
-    val shortName: String
-}
-
 class Model {
 
     val world = world {
@@ -27,24 +23,11 @@ class Model {
 
     val actions = observableListOf<Action>()
 
-    class DumbAction(override val shortName: String) : Action {
-
-    }
-
-    fun changeAction1() {
+    fun setLocation(key: Key) {
+        val location = world[key] as Location
         actions.clear()
-        actions.add(DumbAction("Open door"))
-        actions.add(DumbAction("Something else"))
-    }
-
-    fun changeAction2() {
-        actions.clear()
-        actions.add(DumbAction("Pick up key"))
-        actions.add(DumbAction("Why you keep bugging me?"))
-        actions.add(DumbAction("Here's One more"))
-    }
-
-    fun changeLocation() {
-        location.set(world["living-room"] as Location)
+        for (action in location.actions) {
+            actions.add(action)
+        }
     }
 }

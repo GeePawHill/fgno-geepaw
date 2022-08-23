@@ -1,65 +1,7 @@
 package org.geepawhill.starter
 
-import javafx.geometry.Pos
 import javafx.scene.Parent
-import javafx.scene.control.Button
-import javafx.scene.layout.Background
-import javafx.scene.layout.BackgroundFill
-import javafx.scene.paint.Color
-import javafx.scene.text.Font
 import tornadofx.*
-
-class Styles {
-    companion object {
-        val DARK_BACKGROUND = Background(BackgroundFill(Color.DARKGRAY, null, null))
-        val LARGE_FONT = Font.font(30.0)
-    }
-}
-
-class LocationView(val model: Model) : Fragment() {
-
-    val locationLabel = label("Location") {
-        font = Styles.LARGE_FONT
-    }
-
-
-    override val root: Parent = vbox {
-        minWidth = 300.0
-        background = Styles.DARK_BACKGROUND
-        stackpane {
-            this += locationLabel
-        }
-    }
-
-    init {
-        model.location.addListener { _, _, new ->
-            locationLabel.text = new.key
-        }
-    }
-}
-
-class ActionView(val model: Model) : Fragment() {
-    override val root: Parent = vbox {
-        background = Styles.DARK_BACKGROUND
-        minWidth = 300.0
-        stackpane {
-            label("Action") {
-                font = Styles.LARGE_FONT
-            }
-        }
-        vbox {
-            alignment = Pos.CENTER
-            button("Quit")
-            children.bind(model.actions) { it -> makeButtonFor(it) }
-        }
-    }
-
-    fun makeButtonFor(action: Action): Button {
-        val button = button(action.shortName) {
-        }
-        return button
-    }
-}
 
 
 class MakerView() : View("Plotter") {
@@ -70,19 +12,14 @@ class MakerView() : View("Plotter") {
 
     override val root: Parent = borderpane {
         top = toolbar {
-            button("change location") {
+            button("kitchen") {
                 action {
-                    model.changeLocation()
+                    model.setLocation("kitchen")
                 }
             }
-            button("action 1") {
+            button("living room") {
                 action {
-                    model.changeAction1()
-                }
-            }
-            button("action 2") {
-                action {
-                    model.changeAction2()
+                    model.setLocation("living-room")
                 }
             }
         }
