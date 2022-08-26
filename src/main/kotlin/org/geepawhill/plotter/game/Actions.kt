@@ -10,4 +10,8 @@ class Actions : ActionHolder {
         add(action)
     }
 
+    override fun action(action: Action) {
+        add(action)
+    }
+
 }

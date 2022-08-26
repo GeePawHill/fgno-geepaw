@@ -1,6 +1,6 @@
 package org.geepawhill.plotter.game
 
-class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site")) : FactMaker<Site> {
+class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site"), private val holder: ActionHolder = Actions()) : FactMaker<Site>, ActionHolder by holder {
     private val locationMakers = mutableSetOf<LocationMaker>()
 
     override fun make(world: World): Site {
@@ -8,7 +8,7 @@ class SiteMaker(val parentKey: Key, var key: String = Fact.next("Site")) : FactM
         locationMakers.forEach {
             locations += it.make(world)
         }
-        val site = Site(Fact.combine(parentKey, key), locations)
+        val site = Site(Fact.combine(parentKey, key), locations,holder)
         world.add(site)
         return site
     }
