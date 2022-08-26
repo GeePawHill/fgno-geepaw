@@ -22,7 +22,7 @@ class Model : WorldChanger {
 
     val start = world["kitchen"] as Location
 
-    val location = SimpleObjectProperty<Location>(start)
+    val location = SimpleObjectProperty<Location>()
 
     val actions = observableListOf<Action>()
 

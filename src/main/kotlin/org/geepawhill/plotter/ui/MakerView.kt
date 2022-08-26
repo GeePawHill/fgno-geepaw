@@ -1,6 +1,7 @@
 package org.geepawhill.plotter.ui
 
 import javafx.scene.Parent
+import javafx.stage.WindowEvent
 import tornadofx.*
 
 
@@ -26,6 +27,12 @@ class MakerView() : View("Plotter") {
         center = splitpane {
             this += locationView
             this += actionView
+        }
+    }
+
+    init {
+        primaryStage.addEventHandler(WindowEvent.WINDOW_SHOWN) {
+            model.relocate(model.start.key)
         }
     }
 
