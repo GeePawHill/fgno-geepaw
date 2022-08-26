@@ -9,7 +9,8 @@ import tornadofx.*
 class ActionView(val model: Model) : Fragment() {
     override val root: Parent = vbox {
         background = Styles.DARK_BACKGROUND
-        minWidth = 300.0
+        minWidth = 600.0
+        minHeight = 600.0
         stackpane {
             label("Action") {
                 font = Styles.LARGE_FONT

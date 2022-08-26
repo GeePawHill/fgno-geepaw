@@ -11,7 +11,8 @@ class LocationView(val model: Model) : Fragment() {
 
 
     override val root: Parent = vbox {
-        minWidth = 300.0
+        minWidth = 600.0
+        minHeight = 600.0
         background = Styles.DARK_BACKGROUND
         stackpane {
             this += locationLabel

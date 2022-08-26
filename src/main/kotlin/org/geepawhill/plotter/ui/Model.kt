@@ -11,10 +11,10 @@ class Model : WorldChanger {
         region("region") {
             site("haiku") {
                 location("kitchen") {
-                    actions+= MoveAction("living-room")
+                    route("living-room")
                 }
                 location("living-room") {
-                    actions+= MoveAction("kitchen")
+                    route("kitchen")
                 }
             }
         }

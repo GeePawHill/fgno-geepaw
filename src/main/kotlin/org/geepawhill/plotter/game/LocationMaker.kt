@@ -12,6 +12,6 @@ class LocationMaker(val parentKey: Key, var key: Key = Fact.next("Location")) : 
     }
 
     fun route(key: Key) {
-
+        actions+=MoveAction(key)
     }
 }
