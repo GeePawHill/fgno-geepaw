@@ -8,7 +8,7 @@ import tornadofx.*
 class Model : WorldChanger {
 
     val world = world {
-        region("region") {
+        region("another-world") {
             site("haiku") {
                 location("kitchen") {
                     route("living-room")

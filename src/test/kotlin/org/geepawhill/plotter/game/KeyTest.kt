@@ -10,4 +10,10 @@ class KeyTest {
         val key ="a.b.c.d"
         assertThat(key.suffix()).isEqualTo("d")
     }
+
+    @Test
+    fun `noCategory returns tail of key`() {
+        val key = "a.b.c.d"
+        assertThat(key.noCategory()).isEqualTo("b.c.d")
+    }
 }

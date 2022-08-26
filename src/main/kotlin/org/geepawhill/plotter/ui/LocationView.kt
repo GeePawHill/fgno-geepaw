@@ -1,6 +1,7 @@
 package org.geepawhill.plotter.ui
 
 import javafx.scene.Parent
+import org.geepawhill.plotter.game.noCategory
 import tornadofx.*
 
 class LocationView(val model: Model) : Fragment() {
@@ -21,7 +22,8 @@ class LocationView(val model: Model) : Fragment() {
 
     init {
         model.location.addListener { _, _, new ->
-            locationLabel.text = new.key
+            locationLabel.text = new.key.noCategory()
         }
     }
 }
+
