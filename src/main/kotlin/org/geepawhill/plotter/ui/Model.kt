@@ -9,6 +9,7 @@ class Model : WorldChanger {
 
     val world = world {
         region("another-world") {
+            action(SomeRegionAction())
             site("haiku") {
                 action(AttractGuardsAction())
                 location("kitchen") {
@@ -33,8 +34,12 @@ class Model : WorldChanger {
         for (action in found.actions) {
             actions.add(action)
         }
-        val site = world[found.siteKey] as Site
+        val site = world[found.site] as Site
         for(action in site.actions) {
+            actions.add(action)
+        }
+        val region = world[found.region] as Region
+        for(action in region.actions) {
             actions.add(action)
         }
         location.value = found

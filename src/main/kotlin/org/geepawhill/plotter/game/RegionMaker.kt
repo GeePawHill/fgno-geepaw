@@ -1,6 +1,10 @@
 package org.geepawhill.plotter.game
 
-class RegionMaker(val parentKey: Key, var key: Key = Fact.next("Region")) : FactMaker<Region> {
+class RegionMaker(
+    val parentKey: Key,
+    var key: Key = Fact.next("Region"),
+    private val holder: ActionHolder = Actions()
+) : FactMaker<Region>, ActionHolder by holder {
     val siteMakers = mutableSetOf<SiteMaker>()
 
     override fun make(world: World): Region {
@@ -8,7 +12,7 @@ class RegionMaker(val parentKey: Key, var key: Key = Fact.next("Region")) : Fact
         siteMakers.forEach {
             sites += it.make(world)
         }
-        val region = Region(Fact.combine(parentKey, key), sites)
+        val region = Region(Fact.combine(parentKey, key), sites, holder)
         world.add(region)
         return region
     }
